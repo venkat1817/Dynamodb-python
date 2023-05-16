@@ -27,18 +27,14 @@
 from flask import Flask, render_template
 import boto3
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='template')
 
-# Create a DynamoDB client with the specified region
+
 dynamodb = boto3.client('dynamodb', region_name='us-east-2')
-
 @app.route('/')
 def index():
-    # Query the DynamoDB table
     response = dynamodb.scan(TableName='dynamodb-1')
     items = response['Items']
-
-    # Convert DynamoDB items to a list of dictionaries
     data = []
     for item in items:
         data.append({
@@ -50,12 +46,16 @@ def index():
 
         })
 
-    # Render the template with the data
+   
     return render_template('table.html', data=data)
 
 if __name__ == '__main__':
-app.run(host='0.0.0.0', port=8001, debug=True)
+ app.run(host='0.0.0.0', port=8001, debug=True)
 #python3 app.py run
 
 #output give me ip address in browser
 # ex:-http://18.119.12.40:8001/ 
+
+
+
+
