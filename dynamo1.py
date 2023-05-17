@@ -65,3 +65,18 @@ def index():
 if __name__ == '__main__':
  app.run(host='0.0.0.0', port=8001, debug=True)
 
+
+
+import boto3
+dynamodb = boto3.client('dynamodb', region_name='us-east-1')
+table_name = 'dynamodb-1'
+item = {
+    'id': {'N': '1'},
+    'name': {'S': 'John'},  
+    'age': {'N': '30'},  
+}
+response = dynamodb.put_item(TableName=table_name, Item=item)
+if response['ResponseMetadata']['HTTPStatusCode'] == 200:
+    print('Item inserted successfully.')
+else:
+    print('Error inserting item:', response)
