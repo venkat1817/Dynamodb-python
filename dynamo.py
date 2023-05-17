@@ -34,28 +34,20 @@ from flask import Flask, render_template
 import boto3
 
 app = Flask(__name__, template_folder='template')
-
-
-# Create a DynamoDB client with the specified region
 dynamodb = boto3.client('dynamodb', region_name='us-east-1')
 
 @app.route('/')
 def index():
-    # Query the DynamoDB table
     response = dynamodb.scan(TableName='dynamodb-1')
     items = response['Items']
-
-    # Convert DynamoDB items to a list of dictionaries
     data = []
     for item in items:
         data.append({
-            'name': item['name']['S'],
-            'age': item['age']['N'],
-            'college': item['college']['S'],
-            'location': item['location']['S']
+            'name': item['name'],
+            'age': item['age'],
+            'college': item['college'],
+            'location': item['location']
         })
-
-    # Add additional rows of data manually
     data.append({
         'name': 'venkat',
         'age': '22',
@@ -69,8 +61,6 @@ def index():
         'college': 'CV raman jr College',
         'location': 'anantapur'
     })
-
-    # Render the template with the data
     return render_template('table.html', data=data)
 if __name__ == '__main__':
  app.run(host='0.0.0.0', port=8001, debug=True)
